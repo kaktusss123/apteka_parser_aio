@@ -18,7 +18,7 @@ collected = 0
 async def parse_one_vivafarm(url, session, l):
     global collected
     result = []
-    log.debug(f'Parsing {url}')
+    log.debug('Parsing {}'.format(url))
     async with session.get(url) as response:
         page = fs(await response.text())
         name = (page.xpath(NAME) or [None])[0]
@@ -31,7 +31,7 @@ async def parse_one_vivafarm(url, session, l):
                      (rec.xpath('.//td[@data-label="Адрес:"]//text()') or [''])[0].strip())
             result.append(i)
     collected += 1
-    log.info(f'Parsed {collected}/{l}')
+    log.info('Parsed {}/{}'.format(collected, l))
     return result
 
 
@@ -50,11 +50,11 @@ async def parse_vivafarm():
     async with ClientSession(timeout=ClientTimeout()) as session:
         async with session.get(start.format(1)) as response:
             page_count = int(fs(await response.text()).xpath(last)[0])
-            log.info(f'Collected {page_count} pages')
+            log.info('Collected {} pages'.format(page_count))
         for i in range(1, page_count + 1):
             items += await parse_page_vivafarm(start.format(i), session)
-            log.debug(f'From {i} pages collected {len(items)} items')
-        log.info(f'Collecting items finished. Collected {len(items)} items')
+            log.debug('From {} pages collected {} items'.format(i, len(items)))
+        log.info('Collecting items finished. Collected {} items'.format(len(items)))
         futures = [parse_one_vivafarm(i, session, len(items)) for i in items]
         log.debug('Futures done')
         write(reduce(lambda a, x: a + x, await asyncio.gather(*futures), []))
@@ -62,7 +62,7 @@ async def parse_vivafarm():
 
 def write(items):
     log.info('Writing')
-    with open(f'{__file__}.csv', 'w', encoding='cp1251', newline='') as f:
+    with open('{}.csv'.format(__file__), 'w', encoding='cp1251', newline='') as f:
         writer = DictWriter(f, Item._fields, delimiter=';')
         writer.writeheader()
         for line in items:

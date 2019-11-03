@@ -27,12 +27,12 @@ async def parse_one_extractum(session, base, url):
                      (tr.xpath('./td[@nowrap][2]/text()') or [''])[0].strip(),
                      (tr.xpath('./td/a/text()') or [''])[0].strip())
             res.append(i)
-        log.debug(f'{url} done')
+        log.debug('{url} done'.format(url=url))
     return res
 
 
 async def parse_extractum():
-    log.info(f'Starting {__file__}')
+    log.info('Starting {}'.format(__file__))
     lnk = "//ul[@class='alphabet fl']/li/a/@href"
     base = 'http://aptekadoktor.com'
     start = 'http://aptekadoktor.com/availability'
@@ -40,14 +40,14 @@ async def parse_extractum():
         async with session.get(start) as response:
             page = fs(await response.text())
             urls = page.xpath(lnk)
-        log.info(f'Collected {len(urls)} pages')
+        log.info('Collected {} pages'.format(len(urls)))
         futures = [parse_one_extractum(session, base, url) for url in urls]
         write(reduce(lambda a, x: a + x, await asyncio.gather(*futures), []))
 
 
 def write(items):
     log.info('Writing')
-    with open(f'{__file__}.csv', 'w', encoding='cp1251', newline='') as f:
+    with open('{}.csv'.format(__file__), 'w', encoding='cp1251', newline='') as f:
         writer = DictWriter(f, Item._fields, delimiter=';')
         writer.writeheader()
         for line in items:
