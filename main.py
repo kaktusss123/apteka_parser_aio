@@ -15,10 +15,10 @@ def test():
 def vivafarm():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    # try:
-    loop.run_until_complete(parse_vivafarm(loop))
-    # except Exception as e:
-    #     return '{}: {}'.format(e.__class__.__name__, e)
+    try:
+        loop.run_until_complete(parse_vivafarm(loop))
+    except Exception as e:
+        return '{}: {}'.format(e.__class__.__name__, e)
     return send_from_directory('./', 'vivafarm.py.csv')
 
 
@@ -26,10 +26,10 @@ def vivafarm():
 def extractum():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    # try:
-    loop.run_until_complete(parse_extractum(loop))
-    # except Exception as e:
-    #     return '{}: {}'.format(e.__class__.__name__, e)
+    try:
+        loop.run_until_complete(parse_extractum(loop))
+    except Exception as e:
+        return '{}: {}'.format(e.__class__.__name__, e)
     return send_from_directory('./', 'extractum.py.csv')
 
 
