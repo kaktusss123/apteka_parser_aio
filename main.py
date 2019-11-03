@@ -14,6 +14,7 @@ def test():
 @app.route('/vivafarm', methods=['GET'])
 def vivafarm():
     loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     # try:
     loop.run_until_complete(parse_vivafarm(loop))
     # except Exception as e:
@@ -24,6 +25,7 @@ def vivafarm():
 @app.route('/extractum', methods=['GET'])
 def extractum():
     loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     # try:
     loop.run_until_complete(parse_extractum(loop))
     # except Exception as e:
