@@ -4,6 +4,7 @@ from extractum import parse_extractum
 import asyncio
 
 app = Flask(__name__)
+loop = asyncio.get_event_loop()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -13,17 +14,13 @@ def test():
 
 @app.route('/vivafarm', methods=['GET'])
 def vivafarm():
-    loop = asyncio.get_event_loop()
     loop.run_until_complete(parse_vivafarm())
-    loop.close()
     return send_from_directory('./', 'vivafarm.py.csv')
 
 
 @app.route('/extractum', methods=['GET'])
 def extractum():
-    loop = asyncio.get_event_loop()
     loop.run_until_complete(parse_extractum())
-    loop.close()
     return send_from_directory('./', 'extractum.py.csv')
 
 
