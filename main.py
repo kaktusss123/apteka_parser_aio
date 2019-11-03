@@ -4,7 +4,6 @@ from extractum import parse_extractum
 import asyncio
 
 app = Flask(__name__)
-loop = asyncio.get_event_loop()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -14,7 +13,7 @@ def test():
 
 @app.route('/vivafarm', methods=['GET'])
 def vivafarm():
-    global loop
+    loop = asyncio.new_event_loop()
     try:
         loop.run_until_complete(parse_vivafarm(loop))
     except Exception as e:
@@ -24,7 +23,7 @@ def vivafarm():
 
 @app.route('/extractum', methods=['GET'])
 def extractum():
-    global loop
+    loop = asyncio.new_event_loop()
     try:
         loop.run_until_complete(parse_extractum(loop))
     except Exception as e:
