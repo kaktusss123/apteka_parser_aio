@@ -1,5 +1,5 @@
 import asyncio
-from aiohttp import ClientSession, ClientTimeout
+from aiohttp import ClientSession
 from collections import namedtuple
 from lxml.html import fromstring as fs
 from csv import DictWriter
@@ -47,7 +47,7 @@ async def parse_vivafarm():
     start = r'http://vivafarm.md/124-katalog-all?id_category=124&n=75&p={}'
     last = r'//li[@id="pagination_next_bottom"]/preceding-sibling::li[1]/a/span/text()'
     items = []
-    async with ClientSession(timeout=ClientTimeout()) as session:
+    async with ClientSession() as session:
         async with session.get(start.format(1)) as response:
             page_count = int(fs(await response.text()).xpath(last)[0])
             log.info('Collected {} pages'.format(page_count))
