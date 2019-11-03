@@ -42,7 +42,7 @@ async def parse_page_vivafarm(url, session):
         return page.xpath(item)
 
 
-async def parse_vivafarm():
+async def parse_vivafarm(loop):
     log.info('Starting vivafarm')
     start = r'http://vivafarm.md/124-katalog-all?id_category=124&n=75&p={}'
     last = r'//li[@id="pagination_next_bottom"]/preceding-sibling::li[1]/a/span/text()'
@@ -57,7 +57,7 @@ async def parse_vivafarm():
         log.info('Collecting items finished. Collected {} items'.format(len(items)))
         futures = [parse_one_vivafarm(i, session, len(items)) for i in items]
         log.debug('Futures done')
-        write(reduce(lambda a, x: a + x, await asyncio.gather(*futures), []))
+        write(reduce(lambda a, x: a + x, await asyncio.gather(*futures, loop=loop), []))
 
 
 def write(items):

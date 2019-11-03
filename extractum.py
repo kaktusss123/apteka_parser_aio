@@ -31,7 +31,7 @@ async def parse_one_extractum(session, base, url):
     return res
 
 
-async def parse_extractum():
+async def parse_extractum(loop):
     log.info('Starting {}'.format(__file__))
     lnk = "//ul[@class='alphabet fl']/li/a/@href"
     base = 'http://aptekadoktor.com'
@@ -42,7 +42,7 @@ async def parse_extractum():
             urls = page.xpath(lnk)
         log.info('Collected {} pages'.format(len(urls)))
         futures = [parse_one_extractum(session, base, url) for url in urls]
-        write(reduce(lambda a, x: a + x, await asyncio.gather(*futures), []))
+        write(reduce(lambda a, x: a + x, await asyncio.gather(*futures, loop=loop), []))
 
 
 def write(items):
