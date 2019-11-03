@@ -32,5 +32,5 @@ def extractum():
     return send_from_directory('./', 'extractum.py.csv')
 
 
-app.run()
-# app.run('45.147.198.134', 9512)
+# app.run()
+app.run('45.147.198.134', 9512)
